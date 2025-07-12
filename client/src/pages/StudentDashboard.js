@@ -208,7 +208,7 @@ function StudentDashboard() {
               <Typography variant="body2">Completion Rate</Typography>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          {/* <Grid item xs={12} sm={6} md={3}>
             <Paper
               sx={{
                 p: 3,
@@ -223,7 +223,7 @@ function StudentDashboard() {
               </Typography>
               <Typography variant="body2">Average Grade</Typography>
             </Paper>
-          </Grid>
+          </Grid> */}
         </Grid>
 
         {/* Search and Filter Section */}
@@ -364,70 +364,66 @@ function StudentDashboard() {
               </Typography>
             </Paper>
           ) : (
-            <Grid container spacing={3}>
-              {enrolled.map((course) => (
-                <Grid item xs={12} sm={6} lg={4} key={course._id}>
-                  <Card
-                    sx={{
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      border: "2px solid",
-                      borderColor: "success.main",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        transform: "translateY(-4px)",
-                        boxShadow: 6,
-                      },
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        height: 120,
-                        background: "linear-gradient(135deg, #4caf50, #81c784)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position: "relative",
-                      }}
-                    >
-                      <School sx={{ fontSize: 48, color: "white" }} />
-                      <Chip
-                        icon={<CheckCircle />}
-                        label="Active"
-                        color="success"
-                        size="small"
-                        sx={{ position: "absolute", top: 8, right: 8 }}
-                      />
-                    </Box>
+            <Grid container spacing={2}>
+  {enrolled.map((course) => (
+    <Grid item xs={12} sm={6} lg={4} key={course._id}>
+      <Card
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          border: "1px solid",
+          borderColor: "success.main",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: 3,
+          },
+        }}
+      >
+        <Box
+          sx={{
+            height: 80, // Reduced height
+            background: "linear-gradient(135deg, #4caf50, #81c784)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+          }}
+        >
+          <School sx={{ fontSize: 36, color: "white" }} /> {/* Reduced icon size */}
+          <Chip
+            icon={<CheckCircle />}
+            label="Active"
+            color="success"
+            size="small"
+            sx={{ position: "absolute", top: 4, right: 4 }} // Adjusted position
+          />
+        </Box>
+        <CardContent sx={{ flexGrow: 1, p: 2 }}> {/* Reduced padding */}
+          <Typography variant="h6" component="h3" gutterBottom sx={{ fontSize: '1rem' }}> {/* Reduced font size */}
+            {course.title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" paragraph sx={{ fontSize: '0.75rem' }}> {/* Reduced font size */}
+            {course.description}
+          </Typography>
+          <Box sx={{ mt: 1 }}> {/* Reduced margin */}
+            <Typography variant="body2" color="text.secondary" gutterBottom sx={{ fontSize: '0.75rem' }}>
+              Progress: 75%
+            </Typography>
+            <LinearProgress variant="determinate" value={75} sx={{ borderRadius: 1, height: 6 }} />
+          </Box>
+        </CardContent>
+        <Divider />
+        <CardActions sx={{ p: 1 }}> {/* Reduced padding */}
+          <Button variant="contained" fullWidth sx={{ borderRadius: 2, fontSize: '0.8rem' }}> {/* Reduced font size */}
+            Continue Learning
+          </Button>
+        </CardActions>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
 
-                    <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                      <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
-                        {course.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" paragraph>
-                        {course.description}
-                      </Typography>
-
-                      <Box sx={{ mt: 2 }}>
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          Progress: 75%
-                        </Typography>
-                        <LinearProgress variant="determinate" value={75} sx={{ borderRadius: 1, height: 6 }} />
-                      </Box>
-                    </CardContent>
-
-                    <Divider />
-
-                    <CardActions sx={{ p: 2 }}>
-                      <Button variant="contained" fullWidth sx={{ borderRadius: 2 }}>
-                        Continue Learning
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
           )}
         </Box>
       </Container>
@@ -459,4 +455,4 @@ function StudentDashboard() {
   )
 }
 
-export default StudentDashboard
+export default StudentDashboard;

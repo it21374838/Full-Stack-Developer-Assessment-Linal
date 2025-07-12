@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Course = require('../models/Course');
 const authenticateUser = require('../middleware/authMiddleware');
+const Enrollment = require('../models/Enrollment');
+const User = require('../models/User');
 
 //Add new course (instructor only)
 router.post('/', authenticateUser, async (req, res) => {
@@ -31,8 +33,24 @@ router.get('/my', authenticateUser, async (req, res) => {
     return res.status(403).json({ error: 'Only instructors can view their courses' });
   }
 
-  const courses = await Course.find({ instructor: req.user.userId });
-  res.json(courses);
+  try {
+    const courses = await Course.find({ instructor: req.user.userId });
+
+    // Add enrolled student count for each course
+    const coursesWithCounts = await Promise.all(
+      courses.map(async (course) => {
+        const enrolledCount = await Enrollment.countDocuments({ course: course._id });
+        return {
+          ...course._doc, // spread course fields
+          enrolledStudents: enrolledCount
+        };
+      })
+    );
+
+    res.json(coursesWithCounts);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
 });
 
 // Update a course
@@ -74,6 +92,30 @@ router.delete('/:id', authenticateUser, async (req, res) => {
     res.json({ message: 'Course deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Delete failed' });
+  }
+});
+
+// 📘 View enrolled students for a course (instructor only)
+router.get('/:id/students', authenticateUser, async (req, res) => {
+  try {
+    if (req.user.role !== 'instructor') {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
+    const courseId = req.params.id;
+
+    const enrollments = await Enrollment.find({ course: courseId })
+      .populate('student', 'username'); // only fetch username
+
+    const students = enrollments.map((e) => ({
+      id: e.student._id,
+      username: e.student.username,
+      enrolledAt: e.enrolledAt,
+    }));
+
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch students' });
   }
 });
 module.exports = router;
