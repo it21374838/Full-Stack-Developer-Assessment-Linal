@@ -35,6 +35,7 @@ npm install
 # Frontend
 cd ../client
 npm install
+npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
 
 # server/.env
 MONGO_URI=mongodb+srv://linaldaksitha48:yXbWNQEryynwGbUp@onlineplatform.uslarjm.mongodb.net/?retryWrites=true&w=majority&appName=OnlinePlatform
